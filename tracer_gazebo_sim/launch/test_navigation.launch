@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Simplified launch file for testing -->
+  
+  <!-- Load the map -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find tracer_gazebo_sim)/maps/my_map.yaml">
+  </node>
+  
+  <!-- Start the autonomous navigation node -->
+  <node name="autonomous_navigation" pkg="tracer_gazebo_sim" type="autonomous_navigation.py" output="screen">
+    <param name="map_file" value="$(find tracer_gazebo_sim)/maps/my_map.yaml" />
+    <param name="package_path" value="$(find tracer_gazebo_sim)" />
+  </node>
+  
+  <!-- Fake odometry publisher for testing -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom" 
+        args="0 0 0 0 0 0 map odom 100" />
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_base" 
+        args="0 0 0 0 0 0 odom base_link 100" />
+        
+  <!-- Simple odometry publisher for testing -->
+  <node name="fake_odom_publisher" pkg="rostopic" type="rostopic" 
+        args="pub -r 10 /odom nav_msgs/Odometry '{header: {frame_id: odom}, child_frame_id: base_link, pose: {pose: {position: {x: 0.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}'" />
+        
+  <!-- Start RViz for visualization -->
+  <node name="navigation_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/navigation.rviz" />
+</launch> 

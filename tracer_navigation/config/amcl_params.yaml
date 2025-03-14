@@ -1,0 +1,8 @@
+odom_model_type: diff
+odom_frame_id: odom
+base_frame_id: base_link
+global_frame_id: map
+update_min_d: 0.1
+update_min_a: 0.1
+min_particles: 100
+max_particles: 5000

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch Gazebo with the Tracer robot -->
+  <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch" />
+  
+  <!-- Basic map setup -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find tracer_gazebo_sim)/maps/my_map.yaml" />
+  
+  <!-- Direct controller node -->
+  <node name="direct_controller" pkg="tracer_gazebo_sim" 
+        type="direct_controller.py" output="screen" />
+  
+  <!-- RViz for visualization -->
+  <node name="nav_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/navigation.rviz" />
+</launch> 

@@ -1,0 +1,29 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/baqer/51_ws/devel/include/**",
+        "/home/baqer/catkin_ur/devel/include/**",
+        "/home/baqer/new_catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/baqer/catkin_ur/src/husky_dual_ur5/husky/husky_base/include/**",
+        "/home/baqer/51_ws/src/tracer_ros/tracer_base/include/**",
+        "/home/baqer/51_ws/src/tracer_ros/tracer_gazebo_sim/include/**",
+        "/home/baqer/51_ws/src/ugv_sdk/include/**",
+        "/home/baqer/catkin_ur/src/ur_app/include/**",
+        "/home/baqer/51_ws/src/universal_robot/ur_kinematics/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

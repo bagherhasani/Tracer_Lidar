@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch Gazebo with the Tracer robot -->
+  <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch" />
+  
+  <!-- Load the map -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find tracer_gazebo_sim)/maps/my_map.yaml" />
+  
+  <!-- Publish static transforms -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom" 
+        args="0 0 0 0 0 0 map odom 100" />
+  
+  <!-- Basic TF bridge -->
+  <node name="basic_tf_bridge" pkg="tracer_gazebo_sim" type="basic_tf_bridge.py" output="screen" />
+  
+  <!-- Simple navigation -->
+  <node name="simple_navigation" pkg="tracer_gazebo_sim" type="simple_nav.py" output="screen"
+        launch-prefix="bash -c 'sleep 5; $0 $@'" />
+  
+  <!-- Start RViz for visualization with a unique name -->
+  <node name="navigation_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/navigation.rviz" />
+</launch> 

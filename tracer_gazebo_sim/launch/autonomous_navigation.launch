@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define arguments -->
+  <arg name="use_rviz" default="false"/>
+  
+  <!-- Launch Gazebo with the Tracer robot -->
+  <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch">
+    <!-- Include any args that need to be passed to the included launch file -->
+    <arg name="world_name" value="$(find tracer_gazebo_sim)/worlds/empty.world"/>
+  </include>
+  
+  <!-- Load the map -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find tracer_gazebo_sim)/maps/my_map.yaml">
+  </node>
+  
+  <!-- Add direct TF publishers as a fallback -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom" 
+        args="0 0 0 0 0 0 map odom 100" />
+  
+  <!-- TF Bridge to fix transform issues -->
+  <node name="tf_bridge" pkg="tracer_gazebo_sim" type="tf_bridge.py" output="screen"/>
+  
+  <!-- Allow some time for TF tree to be established -->
+  <node pkg="rospy" type="sleep.py" name="sleep" args="5" />
+  
+  <!-- Start the autonomous navigation node -->
+  <node name="autonomous_navigation" pkg="tracer_gazebo_sim" type="autonomous_navigation.py" output="screen"
+        launch-prefix="bash -c 'sleep 5; $0 $@'">
+    <param name="map_file" value="$(find tracer_gazebo_sim)/maps/my_map.yaml" />
+    <param name="package_path" value="$(find tracer_gazebo_sim)" />
+  </node>
+  
+  <!-- Start RViz for visualization with a unique name -->
+  <node name="navigation_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/navigation.rviz" />
+  
+  <!-- Only uncomment if needed -->
+  <!-- <node name="custom_tracer_skid_steer_controller" pkg="tracer_gazebo_sim" 
+        type="tracer_skid_steer_controller" output="screen"/> -->
+</launch> 
