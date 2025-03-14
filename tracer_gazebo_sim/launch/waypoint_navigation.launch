@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define arguments first -->
+  <arg name="use_rviz" default="false"/>
+  
+  <!-- Launch Gazebo with the Tracer robot without RViz -->
+  <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch">
+    <!-- Just pass the use_rviz arg directly without any conditional -->
+    <!-- <arg name="rviz" value="false" /> -->
+  </include>
+  
+  <!-- Basic map setup -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find tracer_gazebo_sim)/maps/my_map.yaml" />
+  
+  <!-- Waypoint navigator node -->
+  <node name="waypoint_navigator" pkg="tracer_gazebo_sim" 
+        type="direct_controller.py" output="screen" />
+  
+  <!-- RViz for visualization -->
+  <node name="nav_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/waypoint_navigation.rviz" />
+</launch> 
