@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define arguments -->
+  <arg name="map_file" default="$(find tracer_gazebo_sim)/maps/color_map.yaml"/>
+  
+  <!-- Launch Gazebo with the Tracer robot -->
+  <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch" />
+  
+  <!-- Load the map -->
+  <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(arg map_file)" />
+  
+  <!-- Color-based navigation node -->
+  <node name="color_navigator" pkg="tracer_gazebo_sim" 
+        type="color_navigation.py" output="screen">
+    <param name="map_file" value="$(arg map_file)" />
+  </node>
+  
+  <!-- RViz for visualization -->
+  <node name="nav_rviz" pkg="rviz" type="rviz" 
+        args="-d $(find tracer_gazebo_sim)/config/color_navigation.rviz" />
+</launch> 
