@@ -1,10 +1,38 @@
-# ROS Packages for Tracer Mobile Base
+# ROS Packages for Tracer Mobile Base with LIDAR Integration
 
 ## Packages
 
 * tracer_base: a ROS wrapper around tracer SDK to monitor and control the robot
 * tracer_bringup: launch and configuration files to start ROS nodes
 * tracer_msgs: tracer related message definitions
+* tracer_description: URDF model and visualization launch files for Tracer with LIDAR
+* tracer_gazebo_sim: Gazebo simulation files and worlds for Tracer robot
+
+## LIDAR Integration
+
+This repository contains integration of LIDAR sensors with the Tracer mobile base, allowing for:
+- 3D visualization in RViz
+- Sensor data processing
+- Potential use in mapping and navigation tasks
+
+### Running the Tracer with LIDAR Visualization
+
+To launch the Tracer robot with LIDAR in Gazebo and visualize it in RViz:
+
+```bash
+$ roslaunch tracer_description tracer_lidar_visualize.launch
+```
+
+This launch file will:
+1. Load the URDF model with LIDAR
+2. Start Gazebo with a custom world
+3. Spawn the Tracer robot in the simulation
+4. Launch RViz with a navigation configuration
+5. Start all necessary controllers and publishers
+
+![Tracer Robot with LIDAR](images/Screenshot%20from%202025-04-17%2015-04-35.png)
+
+![Tracer Robot with LIDAR - Another View](images/Screenshot%20from%202025-04-17%2015-04-56.png)
 
 ## Communication interface setup
 
