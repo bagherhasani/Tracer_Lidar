@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Arguments -->
+    <arg name="world_name" default="$(find tracer_gazebo_sim)/worlds2/myzone11.world"/>
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+    <arg name="robot_namespace" default="/"/>
+    <arg name="rviz_config" default="$(find tracer_description)/rviz/navigation.rviz"/>
+    
+    <!-- Load the URDF model into the parameter server -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find tracer_description)/urdf/tracer_lidar.xacro'" />
+    
+    <!-- Start Gazebo with an empty world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+    
+    <!-- Spawn the robot in Gazebo -->
+    <node name="spawn_tracer_model" pkg="gazebo_ros" type="spawn_model" args="-x $(arg x)
+          -y $(arg y)
+          -z $(arg z)
+          -Y $(arg yaw)
+          -unpause
+          -urdf
+          -param robot_description
+          -model 'tracer$(arg robot_namespace)'" />
+    
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find tracer_gazebo_sim)/config/tracer_v1_control.yaml" command="load"/>
+    
+    <!-- Load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" 
+          args="tracer_state_controller tracer_motor_r_controller tracer_motor_l_controller"/>
+    
+    <!-- Start the robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    
+    <!-- Start the differential drive controller -->
+    <node name="tracer_skid_steer_controller" pkg="tracer_gazebo_sim" type="tracer_skid_steer_controller">
+        <param name="robot_namespace" type="string" value="$(arg robot_namespace)" />
+    </node>
+    
+    <!-- Start RViz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)" />
+    
+    <!-- Set robot_state_publisher to publish TF -->
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher" />
+</launch> 

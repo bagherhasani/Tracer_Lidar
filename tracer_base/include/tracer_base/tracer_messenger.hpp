@@ -16,7 +16,7 @@
 #include <nav_msgs/Odometry.h>
 #include <tf2_ros/transform_broadcaster.h>
 
-//#include "tracer_msgs/TracerLightCmd.h"
+#include "tracer_msgs/TracerLightCmd.h"
 #include "ugv_sdk/mobile_robot/tracer_robot.hpp"
 namespace westonrobot
 {

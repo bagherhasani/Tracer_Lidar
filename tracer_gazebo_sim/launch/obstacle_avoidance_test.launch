@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- Define arguments first -->
-  <arg name="use_rviz" default="false"/>
+  <!-- Define arguments -->
+  <arg name="use_rviz" default="true"/>
   
-  <!-- Launch Gazebo with the Tracer robot without RViz -->
+  <!-- Launch Gazebo with the new obstacle world -->
   <include file="$(find tracer_gazebo_sim)/launch/tracer_empty_world.launch">
-    <!-- Just pass the use_rviz arg directly without any conditional -->
-    <!-- <arg name="rviz" value="false" /> -->
+    <arg name="world_name" value="$(find tracer_gazebo_sim)/worlds/obstacle_world.world"/>
   </include>
   
   <!-- Basic map setup -->
@@ -40,6 +39,6 @@
         type="direct_controller.py" output="screen" />
   
   <!-- RViz for visualization -->
-  <node name="nav_rviz" pkg="rviz" type="rviz" 
+  <node if="$(arg use_rviz)" name="nav_rviz" pkg="rviz" type="rviz" 
         args="-d $(find tracer_gazebo_sim)/config/waypoint_navigation.rviz" />
 </launch> 
