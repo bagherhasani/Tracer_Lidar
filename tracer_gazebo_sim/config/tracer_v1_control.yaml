@@ -20,6 +20,7 @@ tracer_motor_l_controller:
     i: 20.0
     i_clamp: 100.0
 
-#/gazebo_ros_control/pid_gains:
-#right_wheel: {p: 1.0, i: 0, d: 0.01}
-#left_wheel: {p: 1.0, i: 0, d: 0.01}
+# PID parameters for Gazebo ROS Control
+gazebo_ros_control/pid_gains:
+  right_wheel: {p: 1.0, i: 0.0, d: 0.01}
+  left_wheel: {p: 1.0, i: 0.0, d: 0.01}

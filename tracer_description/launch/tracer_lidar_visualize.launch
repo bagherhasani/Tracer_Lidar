@@ -8,6 +8,7 @@
     <arg name="yaw" default="0.0"/>
     <arg name="robot_namespace" default="/"/>
     <arg name="rviz_config" default="$(find tracer_description)/rviz/navigation.rviz"/>
+    <arg name="model_name" default="tracer_$(arg robot_namespace)_$(anon robot)"/>
     
     <!-- Load the URDF model into the parameter server -->
     <param name="robot_description" command="$(find xacro)/xacro '$(find tracer_description)/urdf/tracer_lidar.xacro'" />
@@ -22,6 +23,9 @@
         <arg name="debug" value="false"/>
     </include>
     
+    <!-- Reset Gazebo before spawning the model -->
+    <node pkg="rosservice" type="rosservice" name="reset_gazebo" args="call --wait /gazebo/reset_simulation" />
+    
     <!-- Spawn the robot in Gazebo -->
     <node name="spawn_tracer_model" pkg="gazebo_ros" type="spawn_model" args="-x $(arg x)
           -y $(arg y)
@@ -30,7 +34,7 @@
           -unpause
           -urdf
           -param robot_description
-          -model 'tracer$(arg robot_namespace)'" />
+          -model $(arg model_name)" />
     
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(find tracer_gazebo_sim)/config/tracer_v1_control.yaml" command="load"/>
